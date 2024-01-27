@@ -44,7 +44,7 @@ Each element within the OSM can be represented through four different types:
 - relation: it is a set of the previous elements. It can be defined as a container used to describe complex objects. For buildings with complex geometry, the relationships are of the Multipolygon type. An example is shown in Figure 2 where the insides polygon represents the interior patio of the building.<br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_2.png" alt="Figure_2" width="300" align="middle" id="Figure_2">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_2.jpg" alt="Figure_2" width="300" align="middle" id="Figure_2">
   <br>
   <em>Figure 2 - Multipolygon in OSM. way_1: outer perimeter, way_2: inner perimeter</em>
 </p>
@@ -98,3 +98,22 @@ A specific condition can appear when the area of interest is situated on several
   <em>Figure 6 - Domain positioned at the intersection of 4 tiles</em>
 </p>
 <br>
+
+The obtained OBJ file is imported using the [`geo_importer`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_importer.py) module.<br>
+
+With the [`geo_preprocessor`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_preprocessor.py), however, a circular portion of the terrain surface is cropped and divided into three different areas:
+- A central circle with the real orography, where the buildings are placed,
+- An intermediate annular portion with only the real orography (without the buildings),
+- An outer annular portion, subject to a smoothing procedure, is modeled with a simplified orography with extreme nodes located at zero elevation.
+
+This configuration avoids a discontinuity in the incoming wind speed profile.<br>
+
+The smoothing procedure consists of changing the z-coordinate of the nodes according to the following equation:
+
+$$ z_i = {(z_i - z_{min}) \beta + z_{min}} $$
+
+where $z_i$ is the coordinate of the i-th node, $z_{min}$ is the minimum elevation of the domain, and $\beta$ is a reductive coefficient that can take values between 0.0 and 1.0. It is calculated as:
+
+$$ \beta = 1 - \frac{d_i - r_{ground}}{r_{bondary} - r_{ground}} $$
+
+where $d_i$ is the distance of the i-th node from the center of the domain, $r_{ground}$ is the inner radius of the annular portion with simplified orography, and $r_{boundary}$ is the radius of the domain.
