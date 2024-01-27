@@ -26,7 +26,7 @@ Figure 1 shows the tile named ASTGTMV003_N42E014, related to the area under eval
 <br><br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_1.png" alt="Figure_1" width="400" align="middle" id="Figure_1">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_1.png" alt="Figure_1" width="500" align="middle" id="Figure_1">
   <br>
   <em>Figure 1 - ASTER-GDEM tile of interest area</em>
 </p>
@@ -45,7 +45,7 @@ Each element within the OSM can be represented through four different types:
 - relation: it is a set of the previous elements. It can be defined as a container used to describe complex objects. For buildings with complex geometry, the relationships are of the Multipolygon type. An example is shown in Figure 2 where the insides polygon represents the interior patio of the building.<br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_2.jpg" alt="Figure_2" width="300" align="middle" id="Figure_2">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_2.jpg" alt="Figure_2" width="400" align="middle" id="Figure_2">
   <br>
   <em>Figure 2 - Multipolygon in OSM. way_1: outer perimeter,<br>way_2: inner perimeter</em>
 </p>
@@ -57,7 +57,7 @@ Figure 3 shows the area analyzed in this work and the zones in which some buildi
 <br><br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_3.jpg" alt="Figure_3" width="300" align="middle" id="Figure_3">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_3.jpg" alt="Figure_3" width="500" align="middle" id="Figure_3">
   <br>
   <em>Figure 3 - Area analyzed in this work: pre-existing buildings (in yellow)<br>and the areas where buildings are added (in red)</em>
 </p>
@@ -84,7 +84,7 @@ After setting the bounding box of the area of interest, the ASTER-GDEM tiles in 
 <br><br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_5.jpg" alt="Figure_5" width="300" align="middle" id="Figure_5">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_5.jpg" alt="Figure_5" width="500" align="middle" id="Figure_5">
   <br>
   <em>Figure 5 - 3D model of the terrain</em>
 </p>
@@ -124,7 +124,7 @@ The result of the operations just described is a cloud of points that is convert
 In Figure 7 it is shown the scheme of the points mentioned above.
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_7.png" alt="Figure_7" width="400" align="middle" id="Figure_7">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_7.png" alt="Figure_7" width="500" align="middle" id="Figure_7">
   <br>
   <em>Figure 7 - Portions of the terrain surface</em>
 </p>
@@ -180,14 +180,14 @@ Within the [`geo_data`](https://github.com/nicola-XVI/GeodataProcessingApplicati
 The result of the procedure just described is shown in Figure 8 and Figure 9.
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_8.png" alt="Figure_8" width="400" align="middle" id="Figure_8">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_8.png" alt="Figure_8" width="500" align="middle" id="Figure_8">
   <br>
   <em>Figure 8 - 3D model of the buildings obtained through the developed procedure<br>(Top view - city of Pescara)</em>
 </p>
 <br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_9.png" alt="Figure_9" width="400" align="middle" id="Figure_9">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_9.png" alt="Figure_9" width="500" align="middle" id="Figure_9">
   <br>
   <em>Figure 9 - 3D model of the buildings obtained through the developed procedure<br>(Axonometric view - city of Pescara)</em>
 </p>
@@ -200,7 +200,7 @@ Before merging the geometry of the buildings with one of the terrain, an additio
 Thanks to the potential provided by Kratos, a function that can calculate the distance (on the z-axis) that each building has with the geometry of the ground is developed within the [`geo_building`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_building.py) module. This function allows to shift the building at the exact altitude. The outline of what has just been described is shown below:
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_10.png" alt="Figure_10" width="400" align="middle" id="Figure_10">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_10.png" alt="Figure_10" width="500" align="middle" id="Figure_10">
   <br>
   <em>Figure 10 - Shifting of buildings on the terrain surface</em>
 </p>
@@ -221,7 +221,7 @@ Two different procedures are implemented in the [`geo_mesher`](https://github.co
 The first method involves the creation of an initial coarse volumetric mesh in which the geometries of the buildings are inserted. Then, the distance field is calculated with the level-zero on the building's surface through an iterative process. Finally, the refinement process is executed with the [MMG](https://github.com/MmgTools/mmg) library (via API in Kratos).<br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_12.jpg" alt="Figure_12" width="400" align="middle" id="Figure_12">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_12.jpg" alt="Figure_12" width="500" align="middle" id="Figure_12">
   <br>
   <em>Figure 12 - Refinement mesh procedure: (a) distance field step 1,<br>(b) distance field step 2, (c) distance field step 3, and (d) result</em>
 </p>
@@ -232,14 +232,14 @@ Figure 12 shows a small test carried out on a group of buildings to evaluate the
 Good results are also obtained in a complex test case. Figure 13 depicts the result achieved on many buildings with complex shapes. The section on a building (Figure 14) underlines the different sizes of the elements (smaller near the surface of the building and larger away from the building).<br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_13.jpg" alt="Figure_13" width="400" align="middle" id="Figure_13">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_13.jpg" alt="Figure_13" width="500" align="middle" id="Figure_13">
   <br>
   <em>Figure 13 - Large scale test with refinement process: axonometric view</em>
 </p>
 <br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_14.png" alt="Figure_14" width="400" align="middle" id="Figure_14">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_14.png" alt="Figure_14" width="500" align="middle" id="Figure_14">
   <br>
   <em>Figure 14 - Large scale test with refinement process: section on a building</em>
 </p>
@@ -294,3 +294,80 @@ Subsequently, the tetrahedral mesh is created through TetGen (available with the
   <em>Figure 20 - Tetrahedral mesh on a test case: detail view of buildings</em>
 </p>
 <br>
+
+As noted in Figure 19 and Figure 20, the element sizes change in different domain regions. It is due to the dimensions previously set.<br>
+
+To obtain the result reported below, it is necessary to provide only the coordinates of the center of the domain (42.442679 latitudes and 14.207077 longitudes), its diameter and height, and the diameter of the portion of the buildings.<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_21.jpg" alt="Figure_21" width="500" align="middle" id="Figure_21">
+  <br>
+  <em>Figure 21 - Numerical model generated with the developed application:<br>terrain and building surfaces (top view)</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_22.png" alt="Figure_22" width="500" align="middle" id="Figure_22">
+  <br>
+  <em>Figure 22 - Numerical model generated with the developed application:<br>boundary surfaces with the top surface in transparency (axonometric view)</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_23.png" alt="Figure_23" width="500" align="middle" id="Figure_23">
+  <br>
+  <em>Figure 23 - Numerical model generated with the developed application:<br>detail on building surfaces (axonometric view)</em>
+</p>
+<br>
+
+To create the volumetric mesh, the minimum and maximum dimensions of the elements for each region are set. This information is indicated in the table reported below:
+
+<p align="center">
+  <em>Table 1 - Size of regions and meshes</em>
+</p>
+
+| ${\color{lightgreen}Region}$ | ${\color{lightgreen}Inner Radius [m]}$ | ${\color{lightgreen}Outer Radius [m]}$ | ${\color{lightgreen}Height [m]}$ | ${\color{lightgreen}Minimum Surface Size [m]}$ | ${\color{lightgreen}Maximum Surface Size [m]}$ |
+| :------------: | :--------------: | :--------------: | :--------: | :----------------------: | :----------------------: |
+| Buildings      | -                | 500.00           | -          | 3.00                     | 3.00                     |
+| Terrain inner  | -                | 1,000.00         | -          | 5.00                     | 5.00                     |
+| Terrain middle | 1,000.00         | 2,000.00         | -          | 5.00                     | 10.00                    |
+| Terrain outer  | 2,000.00         | 3,000.00         | -          | 10.00                    | 20.00                    |
+| Top            | -                | 3,000.00         | -          | 100.00                   | 100.00                   |
+| Lateral        | -                | -                | 500.00     | 20.00                    | 100.00                   |
+
+where the _Terrain inner_ is the central circle where the buildings are located, the _Terrain middle_ is the intermediate annular portion without buildings, and the _Terrain outer_ is the outer annular portion subject to the smoothing procedure.<br>
+
+A tetrahedral mesh is generated on the base of the parameters reported in Table 1. The total number of nodes is 1,379,229, the total number of triangles is 635,948, and one of tetrahedra is 7,764,938.<br>
+
+Triangular elements are the outer faces of the tetrahedra positioned on the external surfaces of the domain. On the triangular elements, the boundary conditions are appropriately set.<br>
+
+Figure 24, Figure 25 and Figure 26 depict, respectively, the axonometric view of a portion of the generated model, a zoom on the buildings and a detail on the building mesh. Lastly, a section is shown in Figure 27 where different elements' sizes relative to the buildings' surface can be seen.
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_24.png" alt="Figure_24" width="500" align="middle" id="Figure_24">
+  <br>
+  <em>Figure 24 - Tetrahedral mesh of the area under study generated with the<br>developed application: axonometric view</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_25.png" alt="Figure_25" width="500" align="middle" id="Figure_25">
+  <br>
+  <em>Figure 25 - Tetrahedral mesh of the area under study generated with the<br>developed application: axonometric view of the buildings</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_26.png" alt="Figure_26" width="500" align="middle" id="Figure_26">
+  <br>
+  <em>Figure 26 - Tetrahedral mesh of the area under study generated with the<br>developed application: detailed mesh on the buildings</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_27.png" alt="Figure_27" width="500" align="middle" id="Figure_27">
+  <br>
+  <em>Figure 27 - Tetrahedral mesh of the area under study generated with the<br>developed application: section on the buildings</em>
+</p>
+<br>
+
