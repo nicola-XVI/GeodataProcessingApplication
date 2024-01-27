@@ -1,5 +1,14 @@
+[![Thesis](https://img.shields.io/static/v1?message=PhD%20Thesis&logo=readdotcv&labelColor=5c5c5c&color=orange&logoColor=white&label=%20)](https://upcommons.upc.edu/handle/2117/361630?show=full)
+[![Linkedin](https://img.shields.io/badge/LinkedIn-0072B1?logo=linkedin&logoColor=white&labelColor=grey)](www.linkedin.com/in/nicola-germano-05535a83)
+[![GitHub](https://img.shields.io/static/v1?message=GitHub&logo=github&labelColor=5c5c5c&color=red&logoColor=white&label=%20)](https://github.com/nicola-XVI)
+
+
+
+
 # GeodataProcessingApplication
 Application developed for PhD thesis entitled: "Software development for the optimization of the influence of wind flows within energy applications and sustainable town planning"
+
+The thesis is available by clicking on the corresponding badge.
 ___
 
 The open-source tool is developed and integrated into the `Kratos Multiphysics` software package (the [GitHub](https://github.com/KratosMultiphysics/Kratos) page). Kratos is designed as an Open-Source framework for the implementation of numerical methods to solve engineering problems. It is written in C++ and designed to allow collaborative development by researchers focusing on modularity and performance.<br><br>
