@@ -1,8 +1,12 @@
 [![Thesis](https://img.shields.io/static/v1?message=PhD%20Thesis&logo=readdotcv&labelColor=5c5c5c&color=orange&logoColor=white&label=%20)](https://upcommons.upc.edu/handle/2117/361630?show=full)
 [![Linkedin](https://img.shields.io/badge/LinkedIn-0072B1?logo=linkedin&logoColor=white&labelColor=grey)](www.linkedin.com/in/nicola-germano-05535a83)
 [![GitHub](https://img.shields.io/static/v1?message=GitHub&logo=github&labelColor=5c5c5c&color=red&logoColor=white&label=%20)](https://github.com/nicola-XVI)
+[![Gmail](https://img.shields.io/static/v1?message=e-mail&logo=gmail&labelColor=5c5c5c&color=red&logoColor=white&label=%20)](mailto:germano.nicola1990@gmail.com)
 
-
+[![DOI:10.18280/ti-ijes.642-426](https://img.shields.io/static/v1?label=DOI&message=10.18280/ti-ijes.642-426&labelColor=5c5c5c&color=B31B1B&logoColor=white)](https://doi.org/10.18280/ti-ijes.642-426)
+[![DOI:10.18280/mmep.070402](https://img.shields.io/static/v1?label=DOI&message=10.18280/mmep.070402&labelColor=5c5c5c&color=B31B1B&logoColor=white)](https://doi.org/10.18280/mmep.070402)
+[![DOI:10.18280/ti-ijes.652-429](https://img.shields.io/static/v1?label=DOI&message=10.18280/ti-ijes.652-429&labelColor=5c5c5c&color=B31B1B&logoColor=white)](https://doi.org/10.18280/ti-ijes.652-429)
+[![DOI:10.18280/mmep.080601](https://img.shields.io/static/v1?label=DOI&message=10.18280/mmep.080601&labelColor=5c5c5c&color=B31B1B&logoColor=white)](https://doi.org/10.18280/mmep.080601)
 
 
 # GeodataProcessingApplication
