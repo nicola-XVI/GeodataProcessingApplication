@@ -8,7 +8,7 @@ Six separate modules are realized to make the tool as robust as possible, each c
 - [`geo_data`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_data.py): it allows obtaining the terrain and building geometry data providing only the coordinates of the center and the radius of the domain to be analyzed.
 - [`geo_preprocessor`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_preprocessor.py): it performs preliminary operations on the data used for realizing the numerical model.
 - [`geo_importer`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_importer.py): it imports information from different formats such as STL, OBJ, XYZ etc. However, the list can be extended to make the process more versatile.
-- [`geo_mesher`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_mesher.py): it allows computing the volumetric mesh. For this modulus, two different approaches can be followed. The first method is based on calculating the distance to the terrain surface for performing a metric-based re-mesh procedure. This step can be repeated iteratively to increase the mesh quality. The open-source software [`MMG`](http://www.mmgtools.org/mmg-remesher-try-mmg/mmg-remesher-tutorials/mmg-remesher-mmgs/mmg-remesher-smooth-surface-remeshing) via API in Kratos is used for this purpose. On the other hand, the second approach sets the minimum and maximum dimensions of the contour surface elements.
+- [`geo_mesher`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_mesher.py): it allows computing the volumetric mesh. For this modulus, two different approaches can be followed. The first method is based on calculating the distance to the terrain surface for performing a metric-based re-mesh procedure. This step can be repeated iteratively to increase the mesh quality. The open-source software [`MMG`](https://github.com/MmgTools/mmg) via API in Kratos is used for this purpose. On the other hand, the second approach sets the minimum and maximum dimensions of the contour surface elements.
 - [`geo_building`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_building.py): it performs operations on the building geometry, such as, for example, positioning within the domain and removing buildings outside a given boundary or below a selected elevation.
 - [`geo_model`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_model.py): it allows both to split the lateral surface of the domain to study different incoming wind directions and create boundary conditions following the conventions in Kratos.
 
@@ -203,5 +203,94 @@ Thanks to the potential provided by Kratos, a function that can calculate the di
   <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_10.png" alt="Figure_10" width="400" align="middle" id="Figure_10">
   <br>
   <em>Figure 10 - Shifting of buildings on the terrain surface</em>
+</p>
+<br>
+
+## Final model
+The operations described in the previous subsection allow the generation of the 3D model of a portion of a city located anywhere in the world (fully automatically). However, the geometry of the buildings and the terrain are still “separated”, as reported in Figure 11 by using different colours.
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_11.jpg" alt="Figure_11" width="500" align="middle" id="Figure_11">
+  <br>
+  <em>Figure 11 - Axonometric view of the terrain surface and building geometries</em>
+</p>
+<br>
+
+Two different procedures are implemented in the [`geo_mesher`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_mesher.py) module to obtain the final numerical model.<br>
+
+The first method involves the creation of an initial coarse volumetric mesh in which the geometries of the buildings are inserted. Then, the distance field is calculated with the level-zero on the building's surface through an iterative process. Finally, the refinement process is executed with the [MMG](https://github.com/MmgTools/mmg) library (via API in Kratos).<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_12.jpg" alt="Figure_12" width="400" align="middle" id="Figure_12">
+  <br>
+  <em>Figure 12 - Refinement mesh procedure: (a) distance field step 1,<br>(b) distance field step 2, (c) distance field step 3, and (d) result</em>
+</p>
+<br>
+
+Figure 12 shows a small test carried out on a group of buildings to evaluate the effectiveness of the meshing process. The iterative refinement is performed to improve the quality of the mesh as shown from Figure 12a to Figure 12c. After some iterations, elements with negative distance are removed. The result is a body-fitted mesh (Figure 12d) where smaller elements are placed near the buildings while coarser elements are located away from them.<br>
+
+Good results are also obtained in a complex test case. Figure 13 depicts the result achieved on many buildings with complex shapes. The section on a building (Figure 14) underlines the different sizes of the elements (smaller near the surface of the building and larger away from the building).<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_13.jpg" alt="Figure_13" width="400" align="middle" id="Figure_13">
+  <br>
+  <em>Figure 13 - Large scale test with refinement process: axonometric view</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_14.png" alt="Figure_14" width="400" align="middle" id="Figure_14">
+  <br>
+  <em>Figure 14 - Large scale test with refinement process: section on a building</em>
+</p>
+<br>
+
+The procedure just described allows to obtain a good quality mesh but with very high computational efforts. This problem can be solved by adopting the parallel version of the used re-mesh tool ([ParMMG](https://github.com/MmgTools/ParMmg)). At the present stage, however, the parallel version is under development. For this reason, a different procedure is created and followed to generate a numerical model by combining terrain and building geometries.<br>
+
+The first step performed with this new procedure involves drilling the terrain surface with the building footprints (Figure 15). This operation allows the creation of new nodes on the terrain surface to insert the geometry of the buildings (Figure 16). Figure 17 shows the terrain surface before and after the "drilling" step focusing on the inserted nodes.<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_15.jpg" alt="Figure_15" width="600" align="middle" id="Figure_15">
+  <br>
+  <em>Figure 15 - Terrain surface with the building footprints</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_16.jpg" alt="Figure_16" width="600" align="middle" id="Figure_16">
+  <br>
+  <em>Figure 16 - Terrain surface with the building geometries</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_17.jpg" alt="Figure_17" width="600" align="middle" id="Figure_17">
+  <br>
+  <em>Figure 17 - (a) terrain surface before the "drilling" procedure with the new building<br>nodes highlighted, (b) terrain surface after the “drilling” procedure</em>
+</p>
+<br>
+
+The next step is the creation of the lateral and upper surface of the domain. Then, the minimum and maximum dimensions that the elements can reach are set for each surface. This step is schematized in Figure 18.<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_18.png" alt="Figure_18" width="500" align="middle" id="Figure_18">
+  <br>
+  <em>Figure 18 - Size of elements for each mesh. In parentheses the default values</em>
+</p>
+<br>
+
+Subsequently, the tetrahedral mesh is created through TetGen (available with the [MeshPy](https://documen.tician.de/meshpy/) library in Python). Figure 19 reports the final mesh of a test conducted on a few buildings. The domain has a diameter of 2.0 km and a height of 300.0 m.<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_19.png" alt="Figure_19" width="500" align="middle" id="Figure_19">
+  <br>
+  <em>Figure 19 - Tetrahedral mesh on a test case: axonometric view</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_20.png" alt="Figure_20" width="500" align="middle" id="Figure_20">
+  <br>
+  <em>Figure 20 - Tetrahedral mesh on a test case: detail view of buildings</em>
 </p>
 <br>
