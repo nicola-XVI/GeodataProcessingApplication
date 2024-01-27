@@ -9,6 +9,7 @@ Six separate modules are realized to make the tool as robust as possible, each c
 - [`geo_preprocessor`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_preprocessor.py): it performs preliminary operations on the data used for realizing the numerical model.
 - [`geo_importer`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_importer.py): it imports information from different formats such as STL, OBJ, XYZ etc. However, the list can be extended to make the process more versatile.
 - [`geo_mesher`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_mesher.py): it allows computing the volumetric mesh. For this modulus, two different approaches can be followed. The first method is based on calculating the distance to the terrain surface for performing a metric-based re-mesh procedure. This step can be repeated iteratively to increase the mesh quality. The open-source software [`MMG`](http://www.mmgtools.org/mmg-remesher-try-mmg/mmg-remesher-tutorials/mmg-remesher-mmgs/mmg-remesher-smooth-surface-remeshing) via API in Kratos is used for this purpose. On the other hand, the second approach sets the minimum and maximum dimensions of the contour surface elements.
+- [`geo_building`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_building.py): it performs operations on the building geometry, such as, for example, positioning within the domain and removing buildings outside a given boundary or below a selected elevation.
 - [`geo_model`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_model.py): it allows both to split the lateral surface of the domain to study different incoming wind directions and create boundary conditions following the conventions in Kratos.
 
 # Dataset
@@ -46,7 +47,7 @@ Each element within the OSM can be represented through four different types:
 <p align="center">
   <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_2.jpg" alt="Figure_2" width="300" align="middle" id="Figure_2">
   <br>
-  <em>Figure 2 - Multipolygon in OSM. way_1: outer perimeter, way_2: inner perimeter</em>
+  <em>Figure 2 - Multipolygon in OSM. way_1: outer perimeter,<br>way_2: inner perimeter</em>
 </p>
 <br>
 
@@ -58,7 +59,7 @@ Figure 3 shows the area analyzed in this work and the zones in which some buildi
 <p align="center">
   <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_3.jpg" alt="Figure_3" width="300" align="middle" id="Figure_3">
   <br>
-  <em>Figure 3 - Area analyzed in this work: pre-existing buildings (in yellow) and the areas where buildings are added (in red)</em>
+  <em>Figure 3 - Area analyzed in this work: pre-existing buildings (in yellow)<br>and the areas where buildings are added (in red)</em>
 </p>
 <br>
 
@@ -78,7 +79,7 @@ After setting the bounding box of the area of interest, the ASTER-GDEM tiles in 
 <p align="center">
   <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_4.png" alt="Figure_4" width="500" align="middle" id="Figure_4">
   <br>
-  <em>Figure 4 - ASTER-GDEM tile in which the domain falls (left), and the bounding box of the domain (right)</em>
+  <em>Figure 4 - ASTER-GDEM tile in which the domain falls (left),<br>and the bounding box of the domain (right)</em>
 </p>
 <br><br>
 
@@ -116,4 +117,91 @@ where $z_i$ is the coordinate of the i-th node, $z_{min}$ is the minimum elevati
 
 $$ \beta = 1 - \frac{d_i - r_{ground}}{r_{bondary} - r_{ground}} $$
 
-where $d_i$ is the distance of the i-th node from the center of the domain, $r_{ground}$ is the inner radius of the annular portion with simplified orography, and $r_{boundary}$ is the radius of the domain.
+where $d_i$ is the distance of the i-th node from the center of the domain, $r_{ground}$ is the inner radius of the annular portion with simplified orography, and $r_{boundary}$ is the radius of the domain.<br>
+
+The result of the operations just described is a cloud of points that is converted into a 2D mesh using the [Triangle](https://github.com/drufat/triangle) library (available in Python).<br>
+
+In Figure 7 it is shown the scheme of the points mentioned above.
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_7.png" alt="Figure_7" width="400" align="middle" id="Figure_7">
+  <br>
+  <em>Figure 7 - Portions of the terrain surface</em>
+</p>
+<br>
+
+## Buildings model
+The [`geo_data`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_data.py) module allows, in addition, to download (via the [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API)) and convert the data provided by the OSM into three-dimensional models.<br>
+
+Data via the [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) are downloaded by providing the bounding box coordinates of the area of interest and the type of data to be extracted. In the specific case, only the information about the buildings is downloaded and stored in a [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON) file.<br>
+
+GeoJSON is an open format that is used to store spatial geometries whose attributes are described through the JavaScript Object Notation. Possible geometries are points, lines, polygons, and multiple collections of these types. The typical structure of a GeoJSON file is like the following:
+
+```json
+{
+  "type": "way",
+  "id": 333362603,
+  "bounds": {
+    "minlat": 42.4424610,
+    "minlon": 14.2067793,
+    "maxlat": 42.4429295,
+    "maxlon": 14.2073653
+  },
+  "nodes": [
+    3404740665,
+    3404740666,
+    3404740667,
+    3404740668,
+    3404740665
+  ],
+  "geometry": [
+    {"lat": 42.4429295, "lon": 14.2072623},
+    {"lat": 42.4428541, "lon": 14.2073653},
+    {"lat": 42.4424610, "lon": 14.2068823},
+    {"lat": 42.4425326, "lon": 14.2067793},
+    {"lat": 42.4429295, "lon": 14.2072623}
+  ],
+  "tags": {
+    "building": "apartments",
+    "building:levels": "6"
+  }
+}
+```
+
+Information regarding the height of buildings can be provided either as number of floors or as total height. In the first case, the full height is calculated as the product of the number of floors and the storey height, which, by default, is set at 3.0 m.<br>
+
+Within the [`geo_data`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_data.py) module, the GeoJSON file is converted into an OBJ format. To do this, first, each building is processed iteratively, and the ground footprint geometry is created; then, it is extruded upwards, obtaining the 3D model. However, this procedure has some limitations:
+- tapered buildings are not correctly represented.
+- In the case of Multipolygon, only the external perimeter is considered (buildings with internal courtyards are not well modelled).
+- Adjacent buildings are combined into a single building, and the joint surface is removed.
+- Overlapping buildings are combined into a single building.
+- Since the community uploads the information, it may happen that some buildings do not have height information. In this case, a default height is set to create the 3D model of the building.
+
+The result of the procedure just described is shown in Figure 8 and Figure 9.
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_8.png" alt="Figure_8" width="400" align="middle" id="Figure_8">
+  <br>
+  <em>Figure 8 - 3D model of the buildings obtained through the developed procedure<br>(Top view - city of Pescara)</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_9.png" alt="Figure_9" width="400" align="middle" id="Figure_9">
+  <br>
+  <em>Figure 9 - 3D model of the buildings obtained through the developed procedure<br>(Axonometric view - city of Pescara)</em>
+</p>
+<br>
+
+As mentioned in the previous section, the buildings cover only the central portion of the final numerical model. For this reason, a function (in [`geo_building`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_building.py) module) is implemented to remove structures outside the given perimeter.<br>
+
+Before merging the geometry of the buildings with one of the terrain, an additional step is necessary to place the buildings at the correct elevation. The OSM, in fact, does not provide the elevation information and, therefore, the buildings are all located on a zero level.<br>
+
+Thanks to the potential provided by Kratos, a function that can calculate the distance (on the z-axis) that each building has with the geometry of the ground is developed within the [`geo_building`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_building.py) module. This function allows to shift the building at the exact altitude. The outline of what has just been described is shown below:
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_10.png" alt="Figure_10" width="400" align="middle" id="Figure_10">
+  <br>
+  <em>Figure 10 - Shifting of buildings on the terrain surface</em>
+</p>
+<br>
