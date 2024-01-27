@@ -77,7 +77,7 @@ After setting the bounding box of the area of interest, the ASTER-GDEM tiles in 
 <br><br>
 
 <p align="center">
-  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_4.png" alt="Figure_4" width="500" align="middle" id="Figure_4">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_4.jpg" alt="Figure_4" width="500" align="middle" id="Figure_4">
   <br>
   <em>Figure 4 - ASTER-GDEM tile in which the domain falls (left),<br>and the bounding box of the domain (right)</em>
 </p>
@@ -326,7 +326,7 @@ To create the volumetric mesh, the minimum and maximum dimensions of the element
   <em>Table 1 - Size of regions and meshes</em>
 </p>
 
-| ${\color{lightgreen}Region}$ | ${\color{lightgreen}Inner Radius [m]}$ | ${\color{lightgreen}Outer Radius [m]}$ | ${\color{lightgreen}Height [m]}$ | ${\color{lightgreen}Minimum Surface Size [m]}$ | ${\color{lightgreen}Maximum Surface Size [m]}$ |
+| ${\color{#128c7e}Region}$ | ${\color{#128c7e}Inner \\ Radius \\ [m]}$ | ${\color{#128c7e}Outer \\ Radius \\ [m]}$ | ${\color{#128c7e}Height \\ [m]}$ | ${\color{#128c7e}Minimum \\ Surface \\ Size \\ [m]}$ | ${\color{#128c7e}Maximum \\ Surface \\ Size \\ [m]}$ |
 | :------------: | :--------------: | :--------------: | :--------: | :----------------------: | :----------------------: |
 | Buildings      | -                | 500.00           | -          | 3.00                     | 3.00                     |
 | Terrain inner  | -                | 1,000.00         | -          | 5.00                     | 5.00                     |
@@ -371,3 +371,85 @@ Figure 24, Figure 25 and Figure 26 depict, respectively, the axonometric view of
 </p>
 <br>
 
+# Boundary conditions
+Before assigning BCs, the lateral surface is divided into several sectors. The default value is 12, but different values can be set.<br>
+
+The BCs are assigned according to the settings reported in Table 2.
+
+<p align="center">
+  <em>Table 2 - BCs assigned</em>
+</p>
+
+| | ${\color{#128c7e}Buildings}$ | ${\color{#128c7e}Terrain \\ inner}$ | ${\color{#128c7e}Terrain \\ middle}$ | ${\color{#128c7e}Terrain \\ outer}$ | ${\color{#128c7e}Sectors}$ | ${\color{#128c7e}Top}$ |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| ${\color{#128c7e}BC \\ type}$ | Wall<br>No-Slip | Wall<br>No-Slip | Wall<br>No-Slip | Wall<br>No-Slip | Velocity Inlet /<br>Pressure Outlet | Wall Slip |
+
+The definition of the BCs is handled automatically by the [`geo_model`](https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/python_scripts/geo_model.py) module. Once the analysis to be performed is set (wind from North, East, South or West), the lateral surfaces are fixed as Velocity Inlet or Pressure Outlet, respectively.<br>
+
+The building and terrain surfaces are set as _Wall No-Slip_, while the top surface is defined as _Wall Slip_.<br>
+
+All the information about BCs is enclosed in a JSON file. An example is reported below:
+
+```json
+"boundary_conditions_process_list": [
+	{
+		"Parameters": {
+			"model_part_name": "FluidModelPart.Buildings"
+		},
+		"kratos_module": "KratosMultiphysics.FluidDynamicsApplication",
+		"process_name": "ApplyNoSlipProcess",
+		"python_module": "apply_noslip_process"
+	},
+	{
+		"Parameters": {
+			"model_part_name": "FluidModelPart.TopModelPart"
+		},
+		"kratos_module": "KratosMultiphysics.FluidDynamicsApplication",
+		"process_name": "ApplySlipProcess",
+		"python_module": "apply_slip_process"
+	},
+	{
+		"Parameters": {
+			"model_part_name": "FluidModelPart.BottomModelPart"
+		},
+		"kratos_module": "KratosMultiphysics.FluidDynamicsApplication",
+		"process_name": " ApplyNoSlipProcess",
+		"python_module": "apply_noslip_process"
+	},
+	
+	...
+]
+```
+
+# Results of CFD analysis
+The numerical model, obtained with the above-described application, is tested by performing a CFD simulation. In the present analysis, an incoming wind from the North direction is set, and the obtained results are depicted from Figure 28 to Figure 31.<br>
+
+The results show a very similar trend to those obtained with the microscale commercial software. Specifically, in Figure 28, the velocity magnitude result is shown; in Figure 29, the pressure field with streamlines is reported, in Figure 30, the velocity vectors on a longitudinal section on the reference building are depicted, and in Figure 31, the streamlines on the neighborhood under investigation are plotted.<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_28.jpg" alt="Figure_28" width="600" align="middle" id="Figure_28">
+  <br>
+  <em>Figure 28 - Top view of velocity magnitudes: incoming wind from North (-y)</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_29.jpg" alt="Figure_29" width="600" align="middle" id="Figure_29">
+  <br>
+  <em>Figure 29 - Top view of pressure levels and streamlines:<br>incoming wind from North (-y)</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_30.jpg" alt="Figure_30" width="600" align="middle" id="Figure_30">
+  <br>
+  <em>Figure 30 - Section view of velocity magnitudes on the reference building:<br>incoming wind from North (-y)</em>
+</p>
+<br>
+
+<p align="center">
+  <img src="https://github.com/nicola-XVI/GeodataProcessingApplication/blob/master/images/figure_31.jpg" alt="Figure_31" width="600" align="middle" id="Figure_31">
+  <br>
+  <em>Figure 31 - Axonometric view of streamlines in the urban fabric:<br>incoming wind from North (-y)</em>
+</p>
+<br>
