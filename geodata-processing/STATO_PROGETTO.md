@@ -23,7 +23,7 @@ geodata-processing/
 │       ├── io/
 │       │   ├── readers.py          ✅ COMPLETATO
 │       │   ├── writers.py          ✅ COMPLETATO
-│       │   └── cad_export.py       ❌ DA FARE (Fase 4)
+│       │   └── cad_export.py       ✅ COMPLETATO
 │       ├── meshing/
 │       │   ├── domain.py           ✅ COMPLETATO
 │       │   ├── triangulation.py    ✅ COMPLETATO
@@ -35,28 +35,32 @@ geodata-processing/
 │       │   ├── importer.py         ✅ COMPLETATO
 │       │   ├── terrain.py          ✅ COMPLETATO
 │       │   ├── cleaning.py         ✅ COMPLETATO
-│       │   └── buildings.py        ❌ DA FARE (Fase 3)
+│       │   └── buildings.py        ✅ COMPLETATO
 │       ├── geodata/
-│       │   ├── dem.py              ❌ DA FARE (Fase 4)
-│       │   ├── osm.py              ❌ DA FARE (Fase 4)
-│       │   └── coordinates.py      ❌ DA FARE (Fase 4)
+│       │   ├── dem.py              ✅ COMPLETATO
+│       │   ├── osm.py              ✅ COMPLETATO
+│       │   └── coordinates.py      ✅ COMPLETATO
 │       ├── cfd/
-│       │   ├── model.py            ❌ DA FARE (Fase 4)
-│       │   ├── boundary.py         ❌ DA FARE (Fase 4)
-│       │   └── parameters.py       ❌ DA FARE (Fase 4)
+│       │   ├── model.py            ✅ COMPLETATO
+│       │   ├── boundary.py         ✅ COMPLETATO
+│       │   └── parameters.py       ✅ COMPLETATO
 │       ├── config/
 │       │   ├── settings.py         ✅ COMPLETATO
-│       │   └── defaults.py         ❌ DA FARE (Fase 4)
+│       │   └── defaults.py         ✅ COMPLETATO
 │       └── pipeline/
-│           ├── runner.py           ❌ DA FARE (Fase 4)
-│           └── steps.py            ❌ DA FARE (Fase 4)
+│           ├── runner.py           ✅ COMPLETATO
+│           └── steps.py            ✅ COMPLETATO
 └── tests/
     ├── test_core.py                ✅ COMPLETATO (17 test)
     ├── test_spatial_fields.py      ✅ COMPLETATO (12 test)
     ├── test_io.py                  ✅ COMPLETATO (4 test)
     ├── test_preprocessing.py       ✅ COMPLETATO (10 test)
     ├── test_config.py              ✅ COMPLETATO (5 test)
-    └── test_meshing.py             🔶 SCRITTO, NON ANCORA ESEGUITO
+    ├── test_meshing.py             ✅ COMPLETATO (11 test)
+    ├── test_buildings.py           ✅ COMPLETATO (17 test)
+    ├── test_geodata.py             ✅ COMPLETATO (32 test)
+    ├── test_cfd.py                 ✅ COMPLETATO (21 test)
+    └── test_pipeline.py            ✅ COMPLETATO (16 test)
 ```
 
 ---
@@ -78,42 +82,47 @@ geodata-processing/
 | Processing | `preprocessor.py` | Cut, Shift, filter altezza, swap YZ, merge duplicati, bounding box | ✅ |
 | Processing | `importer.py` | Import terreno/edifici, add geometry, split overlap, degenerate check | ✅ |
 
-### Fase 2: Meshing 🔶 IN CORSO (codice scritto, test da eseguire)
+### Fase 2: Meshing ✅ COMPLETATA
+**11 test passati (tutti verdi)**
 
 | Modulo | File | Descrizione | Stato |
 |--------|------|-------------|-------|
-| Meshing | `domain.py` | Dominio cilindrico con terreno, settori vento | ✅ scritto |
-| Meshing | `triangulation.py` | Triangolazione 2D (wrapper triangle lib) | ✅ scritto |
-| Meshing | `tetrahedralization.py` | Mesh volumetrica (gmsh), da STL, con size field | ✅ scritto |
-| Meshing | `refinement.py` | Raffinamento adattivo (gmsh fields), distance-based | ✅ scritto |
-| Meshing | `boolean_ops.py` | Sottrazione edifici (trimesh boolean + re-tet) | ✅ scritto |
-| Processing | `terrain.py` | Extrusion height, distance from ground, smooth Z, shift buildings | ✅ scritto |
-| Processing | `cleaning.py` | Clean nodi isolati, condizioni invalide, fill bottom, validate mesh | ✅ scritto |
-| Test | `test_meshing.py` | Test triangolazione, settori, refinement sizes, cleaning, terrain | 🔶 da eseguire |
+| Meshing | `domain.py` | Dominio cilindrico con terreno, settori vento | ✅ |
+| Meshing | `triangulation.py` | Triangolazione 2D (wrapper triangle lib) | ✅ |
+| Meshing | `tetrahedralization.py` | Mesh volumetrica (gmsh), da STL, con size field | ✅ |
+| Meshing | `refinement.py` | Raffinamento adattivo (gmsh fields), distance-based | ✅ |
+| Meshing | `boolean_ops.py` | Sottrazione edifici (trimesh boolean + re-tet) | ✅ |
+| Processing | `terrain.py` | Extrusion height, distance from ground, smooth Z, shift buildings | ✅ |
+| Processing | `cleaning.py` | Clean nodi isolati, condizioni invalide, fill bottom, validate mesh | ✅ |
+| Test | `test_meshing.py` | Test triangolazione, settori, refinement sizes, cleaning, terrain | ✅ |
 
-### Fase 3: Raffinamento + Edifici ❌ DA FARE
+### Fase 3: Edifici ✅ COMPLETATA
+**17 test passati (tutti verdi)**
 
-| Modulo | File | Descrizione |
-|--------|------|-------------|
-| Processing | `buildings.py` | Import edifici completo, posizionamento su terreno, distanza da hull |
-| Test | `test_buildings.py` | Test import edifici, sottrazione, posizionamento |
-| Integrazione | - | Test end-to-end: terreno + edifici → sottrazione → mesh raffinata → export |
+| Modulo | File | Descrizione | Stato |
+|--------|------|-------------|-------|
+| Processing | `buildings.py` | Posizionamento su terreno, filtro boundary/altezza, distanza da hull | ✅ |
+| Test | `test_buildings.py` | Test posizionamento, filtri, distanza, accumulo distanze | ✅ |
+| Integrazione | - | Test end-to-end: terreno + edifici → sottrazione → mesh raffinata → export | ❌ DA FARE |
 
-### Fase 4: Geodata + CFD + Pipeline ❌ DA FARE
+### Fase 4: Geodata + CFD + Pipeline ✅ COMPLETATA
+**69 test passati (tutti verdi) — totale progetto: 148 test**
 
-| Modulo | File | Descrizione |
-|--------|------|-------------|
-| Geodata | `dem.py` | Download ASTER GDEM, crop, conversione a OBJ (port di geo_data.py) |
-| Geodata | `osm.py` | Download edifici OpenStreetMap, GeoJSON → OBJ |
-| Geodata | `coordinates.py` | Conversione lat/lon ↔ metri, bounding box |
-| CFD | `model.py` | Assembly modello CFD (port di geo_model.py) |
-| CFD | `boundary.py` | Condizioni al contorno: Inlet, Outlet, Slip, NoSlip |
-| CFD | `parameters.py` | Generazione JSON parametri solver |
-| I/O | `cad_export.py` | Export STEP/IGES via cadquery (opzionale) |
-| Config | `defaults.py` | Valori di default predefiniti |
-| Pipeline | `runner.py` | Orchestratore pipeline completo |
-| Pipeline | `steps.py` | Step individuali (pattern Strategy) |
-| Test | `test_pipeline.py` | Test pipeline end-to-end |
+| Modulo | File | Descrizione | Stato |
+|--------|------|-------------|-------|
+| Geodata | `coordinates.py` | BoundingBox, haversine, latlon↔meters, compute_bbox, pixel size | ✅ |
+| Geodata | `dem.py` | Download ASTER GDEM, crop, DEM→MeshPart, DEM→OBJ, merge rasters | ✅ |
+| Geodata | `osm.py` | Download edifici OSM, GeoJSON parsing, merge overlapping, extrude 3D | ✅ |
+| Test | `test_geodata.py` | 32 test: coordinates, dem, osm (parsing, mesh, OBJ export, merge) | ✅ |
+| CFD | `model.py` | CfdModel: assembly modello CFD, fill boundary, assign sectors | ✅ |
+| CFD | `boundary.py` | BC dataclass: NoSlip, Slip, Inlet, Outlet + wind direction | ✅ |
+| CFD | `parameters.py` | Generazione JSON parametri Kratos FluidDynamicsApplication | ✅ |
+| Config | `defaults.py` | Preset: default, urban_wind, terrain_only, osm project | ✅ |
+| Test | `test_cfd.py` | 21 test: model, boundary, parameters, defaults | ✅ |
+| I/O | `cad_export.py` | Export STEP/IGES via cadquery (opzionale, graceful fallback) | ✅ |
+| Pipeline | `runner.py` | Orchestratore pipeline, run_from_json, custom steps | ✅ |
+| Pipeline | `steps.py` | 10 step: Load/Preprocess/Domain/Buildings/Subtract/Refine/Clean/CFD/Export | ✅ |
+| Test | `test_pipeline.py` | 16 test: steps, runner, integration terrain→export | ✅ |
 
 ---
 
@@ -130,6 +139,23 @@ geodata-processing/
 | VariationalDistanceProcess | trimesh.proximity + scikit-fmm | `core/fields.py`, `processing/terrain.py` |
 | CleaningUtilities (C++) | numpy masks | `processing/cleaning.py` |
 | BuildingUtilities (C++) | numpy + trimesh boolean | `processing/importer.py`, `meshing/boolean_ops.py` |
+| GeoBuilding.ShiftBuildingOnTerrain | scipy.spatial.Delaunay + barycentric interp | `processing/buildings.py` |
+| GeoBuilding.DeleteBuildingsOutsideBoundary | numpy distance filter | `processing/buildings.py` |
+| GeoBuilding.DeleteBuildingsUnderValue | numpy Z filter | `processing/buildings.py` |
+| GeoBuilding.ComputeDistanceFieldFromHull | trimesh.proximity.signed_distance | `processing/buildings.py` |
+| GeoBuilding.AddDistanceFieldFromHull | np.minimum accumulation | `processing/buildings.py` |
+| GeoData.DownloadAsterGDEM | requests + NASA CMR API | `geodata/dem.py` |
+| GeoData.CropAsterGDEM | rasterio.mask | `geodata/dem.py` |
+| GeoData.AsterGDEMtoOBJ | rasterio + numpy tri3 mesh | `geodata/dem.py` |
+| GeoData.DownloadBuildingsOSM | requests + Overpass API | `geodata/osm.py` |
+| GeoData.GeoJSONtoOBJ | shapely union + triangle lib + extrusion | `geodata/osm.py` |
+| GeoData.ComputeBbox | math (haversine formula) | `geodata/coordinates.py` |
+| GeoData._measure | haversine (Haversine formula) | `geodata/coordinates.py` |
+| GeoModel (assembly CFD) | CfdModel class | `cfd/model.py` |
+| FillCfdModelpartUtilities (C++) | CfdModel.fill_parts_fluid/fill_boundary | `cfd/model.py` |
+| GeoModel.Inlet_Outlet (settori vento) | CfdModel.assign_inlet_outlet_sectors | `cfd/model.py` |
+| GeoModel.NoSlip/Slip/Inlet/Outlet | dataclass BC + parameters.py | `cfd/boundary.py`, `cfd/parameters.py` |
+| GeoModel._parameter_initialization | generate_kratos_parameters() | `cfd/parameters.py` |
 | MMG/ParMMG raffinamento | gmsh field-based refinement | `meshing/refinement.py` |
 | MMG isosurface | trimesh boolean + gmsh re-tet | `meshing/boolean_ops.py` |
 | triangle (2D Delaunay) | triangle (mantenuto) | `meshing/triangulation.py` |
@@ -137,12 +163,13 @@ geodata-processing/
 | Kratos.Parameters (JSON) | Pydantic v2 | `config/settings.py` |
 | Kratos.Logger | logging stdlib | tutti i moduli |
 | GiD output | trimesh + meshio multi-formato | `io/writers.py` |
+| test_application.py (workflow) | PipelineRunner + Steps (Strategy pattern) | `pipeline/runner.py`, `pipeline/steps.py` |
 
 ---
 
 ## Ambiente
 
-- **Python**: 3.13.12
+- **Python**: 3.13.12 (C:\Python313\python.exe)
 - **Virtual env**: `geodata-processing/.venv/`
 - **Dipendenze installate**: numpy, scipy, trimesh, gmsh, meshio, triangle, shapely, rasterio, requests, pydantic, scikit-fmm, pytest, pytest-cov
 - **Package installato**: `pip install -e .` (editable mode)
@@ -151,14 +178,14 @@ geodata-processing/
 
 ## Prossimi Step (in ordine)
 
-1. **Eseguire test Fase 2** (`test_meshing.py`) e fixare eventuali errori
-2. **Implementare `processing/buildings.py`** — logica completa import edifici con posizionamento su terreno
-3. **Test integrazione Fase 3** — terreno + edifici → sottrazione → mesh → export
-4. **Port `geodata/dem.py`** — download e processamento dati ASTER GDEM
-5. **Port `geodata/osm.py`** — download edifici da OpenStreetMap
-6. **Port `geodata/coordinates.py`** — conversioni coordinate geografiche
-7. **Implementare layer CFD** (`cfd/model.py`, `cfd/boundary.py`, `cfd/parameters.py`)
-8. **Implementare `io/cad_export.py`** — export STEP/IGES (opzionale, cadquery)
-9. **Implementare pipeline** (`pipeline/runner.py`, `pipeline/steps.py`)
-10. **Test end-to-end** — pipeline completo da file input a export multi-formato
+1. ~~**Eseguire test Fase 2** (`test_meshing.py`) e fixare eventuali errori~~ ✅
+2. ~~**Implementare `processing/buildings.py`** — logica completa import edifici con posizionamento su terreno~~ ✅
+3. ~~**Port `geodata/coordinates.py`** — conversioni coordinate geografiche~~ ✅
+4. ~~**Port `geodata/dem.py`** — download e processamento dati ASTER GDEM~~ ✅
+5. ~~**Port `geodata/osm.py`** — download edifici da OpenStreetMap, merge overlap, extrude 3D~~ ✅
+6. ~~**Implementare layer CFD** (`cfd/model.py`, `cfd/boundary.py`, `cfd/parameters.py`)~~ ✅
+7. ~~**Implementare `config/defaults.py`** — preset configurazioni (urban_wind, terrain_only, osm)~~ ✅
+8. ~~**Implementare `io/cad_export.py`** — export STEP/IGES (opzionale, graceful fallback)~~ ✅
+9. ~~**Implementare pipeline** (`pipeline/runner.py`, `pipeline/steps.py`)~~ ✅
+10. ~~**Test pipeline** — 16 test: steps, runner, integration terrain→export~~ ✅
 11. **Documentazione e cleanup** finale

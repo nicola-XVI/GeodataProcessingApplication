@@ -13,10 +13,17 @@ src/geodata/io/__init__.py
 src/geodata/io/readers.py
 src/geodata/io/writers.py
 src/geodata/meshing/__init__.py
+src/geodata/meshing/boolean_ops.py
+src/geodata/meshing/domain.py
+src/geodata/meshing/refinement.py
+src/geodata/meshing/tetrahedralization.py
+src/geodata/meshing/triangulation.py
 src/geodata/pipeline/__init__.py
 src/geodata/processing/__init__.py
+src/geodata/processing/cleaning.py
 src/geodata/processing/importer.py
 src/geodata/processing/preprocessor.py
+src/geodata/processing/terrain.py
 src/geodata/utils/__init__.py
 src/geodata_processing.egg-info/PKG-INFO
 src/geodata_processing.egg-info/SOURCES.txt
@@ -26,5 +33,6 @@ src/geodata_processing.egg-info/top_level.txt
 tests/test_config.py
 tests/test_core.py
 tests/test_io.py
+tests/test_meshing.py
 tests/test_preprocessing.py
 tests/test_spatial_fields.py

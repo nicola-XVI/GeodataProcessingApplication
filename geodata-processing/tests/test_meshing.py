@@ -160,18 +160,22 @@ class TestTerrainProcessing:
     def test_smooth_terrain_z(self):
         mp = MeshPart()
         coords = np.array([
-            [0, 0, 10],    # center, within r_ground
+            [0, 0, 0],     # center, within r_ground (z_min reference)
+            [20, 0, 10],   # within r_ground, unchanged
             [50, 0, 10],   # between r_ground and r_boundary
             [90, 0, 10],   # near boundary
         ], dtype=np.float64)
-        mp.create_nodes_bulk(np.arange(1, 4, dtype=np.int64), coords)
+        mp.create_nodes_bulk(np.arange(1, 5, dtype=np.int64), coords)
 
         smooth_terrain_z(mp, x_center=0, y_center=0, r_ground=30, r_boundary=100)
 
-        # Center node should be unchanged
-        assert mp.nodes.get_coords(1)[2] == pytest.approx(10.0)
-        # Boundary node should be closer to z_min
+        # Center node (z_min) should be unchanged
+        assert mp.nodes.get_coords(1)[2] == pytest.approx(0.0)
+        # Node within r_ground should be unchanged
+        assert mp.nodes.get_coords(2)[2] == pytest.approx(10.0)
+        # Nodes beyond r_ground should be smoothed towards z_min=0
         assert mp.nodes.get_coords(3)[2] < 10.0
+        assert mp.nodes.get_coords(4)[2] < mp.nodes.get_coords(3)[2]
 
     def test_extrusion_height(self):
         mp = MeshPart()
